@@ -1,11 +1,9 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-//import bcryptjs from "bcryptjs";
 
 import employeesRoutes from "./routes/employees.routes.js";
 import indexRoutes from "./routes/index.routes.js";
-
 
 const app = express();
 

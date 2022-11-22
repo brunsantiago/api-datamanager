@@ -200,10 +200,10 @@ export const getDevice = async (req, res) => {
 
 export const addDevice = async (req, res) => {
   try {
-    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj } = req.body;
+    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj ]
+      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin ]
     );
     res.json({ result: 0 } );
   } catch (error) {
@@ -237,13 +237,13 @@ export const deleteDevice = async (req, res) => {
 
 export const updateDevice = async (req, res) => {
   try {
-    const { androidID } = req.params;
-    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj } = req.body;
-    const [result] = await pool.query("UPDATE devices SET DEVI_ANID=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?, DEVI_MARC=?, DEVI_MODE=?,	DEVI_NCLI=?,	DEVI_NOBJ=? WHERE DEVI_ANID = ?",
-    [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, androidID ]
+    //const { androidID } = req.params;
+    const { devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_ncli,	devi_nobj, devi_anid} = req.body;
+    const [result] = await pool.query("UPDATE devices SET DEVI_NLIN=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?,	DEVI_NCLI=?,	DEVI_NOBJ=? WHERE DEVI_ANID = ?",
+    [ devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj, devi_ncli,	devi_nobj, devi_anid ]
     );
     if (result.affectedRows === 0){
-      res.status(404).json({ result: 0 }); // Android ID no econtrado
+      res.status(200).json({ result: 0 }); // Android ID no econtrado o sin cambios
     }else{
       res.status(201).json({ result: 1}); // Dispositivo Actualizado
     }
@@ -318,10 +318,10 @@ export const countPending = async (req, res) => {
 
 export const addRequestDevice = async (req, res) => {
   try {
-    const { rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper } = req.body;
+    const { rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO request_device (RDEV_ANID, RDEV_DATE, RDEV_ESTA, RDEV_CCLI, RDEV_COBJ, RDEV_MARC, RDEV_MODE,	RDEV_NOMB,	RDEV_NCLI,	RDEV_NOBJ,	RDEV_CPER) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE RDEV_DATE=VALUES(rdev_date), RDEV_ESTA=VALUES(rdev_esta), RDEV_CCLI=VALUES(rdev_ccli), RDEV_COBJ=VALUES(rdev_cobj), RDEV_MARC=VALUES(rdev_marc), RDEV_MODE=VALUES(rdev_mode),	RDEV_NOMB=VALUES(rdev_nomb),	RDEV_NCLI=VALUES(rdev_ncli),	RDEV_NOBJ=VALUES(rdev_nobj),	RDEV_CPER=VALUES(rdev_cper)",
-      [ rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper ]
+      "INSERT INTO request_device (RDEV_ANID, RDEV_DATE, RDEV_ESTA, RDEV_CCLI, RDEV_COBJ, RDEV_MARC, RDEV_MODE,	RDEV_NOMB,	RDEV_NCLI,	RDEV_NOBJ,	RDEV_CPER, RDEV_NLIN ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE RDEV_DATE=VALUES(rdev_date), RDEV_ESTA=VALUES(rdev_esta), RDEV_CCLI=VALUES(rdev_ccli), RDEV_COBJ=VALUES(rdev_cobj), RDEV_MARC=VALUES(rdev_marc), RDEV_MODE=VALUES(rdev_mode),	RDEV_NOMB=VALUES(rdev_nomb),	RDEV_NCLI=VALUES(rdev_ncli),	RDEV_NOBJ=VALUES(rdev_nobj),	RDEV_CPER=VALUES(rdev_cper),	RDEV_NLIN=VALUES(rdev_nlin)",
+      [ rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin ]
     );
     return res.json({ result : result.affectedRows });
   } catch (error) {

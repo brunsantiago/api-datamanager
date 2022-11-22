@@ -102,7 +102,7 @@ router.get("/devices", getAllDevices);
 router.delete("/devices/:androidID", deleteDevice );
 
 //UPDATE Device
-router.put("/devices/:androidID", updateDevice );
+router.put("/devices", updateDevice );
 
 
 // TABLE REQUEST DEVICE
