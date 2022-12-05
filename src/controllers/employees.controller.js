@@ -335,9 +335,9 @@ export const statusAdded = async (req, res) => {
     const [result] = await pool.query("UPDATE request_device SET RDEV_ESTA = 'added' WHERE RDEV_ANID = ?",
     [ androidID ]);
     if (result.affectedRows === 0){
-      return res.status(404).json({ message: "androidID no econtrado" });
+      return res.status(404).json({ message: "androidID no econtrado" }); // Cambiar status para que no salte como error cuando no hay modificaciones
     }else{
-      res.status(201).json({ message: "Estado de solicitud cambiada" });
+      return res.status(201).json({ message: "Estado de solicitud cambiada" });
     }
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" + error });
