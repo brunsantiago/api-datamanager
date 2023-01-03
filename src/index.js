@@ -4,7 +4,7 @@ import { PORT } from "./config.js";
 //HTTP CONFIG
 
 app.listen(PORT);
-console.log(`Server on port http://localhost:${PORT}`);
+console.log(`Server on port http://localhost: ${PORT}`);
 
 
 //HTTPS CONFIG
