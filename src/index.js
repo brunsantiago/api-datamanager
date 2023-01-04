@@ -33,9 +33,13 @@ const https_options = {
  cert: fs.readFileSync("src/certificate/certificate.crt")
 };
 
-https.createServer(https_options, function (req, res) {
- res.writeHead(200);
- res.end("Welcome to Node.js HTTPS Server");
-}).listen(443)
+// https.createServer(https_options, function (req, res) {
+//  res.writeHead(200);
+//  res.end("Welcome to Node.js HTTPS Server");
+// }).listen(443)
 
-console.log(`Server on port api-datamanager.click: 443`);
+https.createServer(https_options,app).listen(443, function(){
+	console.log('Servidor https corriendo en el puerto: '+ 443);
+});
+
+//console.log(`Server on port api-datamanager.click: 443`);
