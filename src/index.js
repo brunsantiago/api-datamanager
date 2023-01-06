@@ -28,9 +28,9 @@ import https from 'https';
 // const https = require('https');
 // const fs = require('fs');
 const https_options = {
- ca: fs.readFileSync("src/certificate/ca_bundle.crt"),
- key: fs.readFileSync("src/certificate/private.key"),
- cert: fs.readFileSync("src/certificate/certificate.crt")
+ ca: fs.readFileSync("ca_bundle.crt"),
+ key: fs.readFileSync("private.key"),
+ cert: fs.readFileSync("certificate.crt")
 };
 
 // https.createServer(https_options, function (req, res) {
