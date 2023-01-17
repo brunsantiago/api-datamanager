@@ -88,7 +88,7 @@ router.get("/objetivos", getAllObjetivos);
 router.get("/objetivos/:idCliente", getObjetivos)
 
 // GET Coordinadas from Objetivo
-router.get("/objetivos/:idObjetivo", requestCoordinate)
+router.get("/objetivos/coordinate/:idObjetivo", requestCoordinate)
 
 
 // TABLE DEVICE

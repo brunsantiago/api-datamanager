@@ -189,7 +189,7 @@ export const requestCoordinate = async (req, res) => {
     const { idObjetivo } = req.params;
     const [result] = await pool.query("SELECT OBJE_MAPA FROM puesgrup WHERE GRUP_CODI= ?",
     [ idObjetivo ]);
-    res.json(result);
+    res.json(result[0]);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }
