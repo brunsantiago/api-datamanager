@@ -1,5 +1,5 @@
 import app from "./app.js";
-import { PORT } from "./config.js";
+import { PORT_HTTPS } from "./config.js";
 
 //HTTP CONFIG
 
@@ -38,8 +38,8 @@ const https_options = {
 //  res.end("Welcome to Node.js HTTPS Server");
 // }).listen(443)
 
-https.createServer(https_options,app).listen(443, function(){
-	console.log('Servidor https corriendo en el puerto: '+ 443);
+https.createServer(https_options,app).listen(PORT_HTTPS, function(){
+	console.log('Servidor https corriendo en el puerto: '+ PORT_HTTPS);
 });
 
 //console.log(`Server on port api-datamanager.click: 443`);

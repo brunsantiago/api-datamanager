@@ -13,6 +13,7 @@ import {
   getCliente,
   getAllObjetivos,
   getObjetivos,
+  requestCoordinate,
   getCounter,
   incrementCounter,
   decrementCounter,
@@ -85,6 +86,9 @@ router.get("/objetivos", getAllObjetivos);
 
 // GET Objetivos from Cliente
 router.get("/objetivos/:idCliente", getObjetivos)
+
+// GET Coordinadas from Objetivo
+router.get("/objetivos/:idObjetivo", requestCoordinate)
 
 
 // TABLE DEVICE

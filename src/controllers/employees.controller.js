@@ -179,7 +179,17 @@ export const getObjetivos = async (req, res) => {
     const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puestos, puesgrup WHERE PUES_GRUP=GRUP_CODI AND PUES_OBJE = ? AND OBJE_BAJA IS NULL AND PUES_TIPO != 3",
     [ idCliente ]);
     res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
 
+export const requestCoordinate = async (req, res) => {
+  try {
+    const { idObjetivo } = req.params;
+    const [result] = await pool.query("SELECT OBJE_MAPA FROM puesgrup WHERE GRUP_CODI= ?",
+    [ idObjetivo ]);
+    res.json(result);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }

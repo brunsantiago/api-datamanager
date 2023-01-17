@@ -1,8 +1,8 @@
 import { config } from "dotenv";
 config();
 
-export const PORT = 3000
-//export const PORT = 443;
+//export const PORT = 3000
+export const PORT_HTTPS = 443;
 
 export const DB_HOST = "186.182.25.11";
 export const DB_USER = "firebasetest";
