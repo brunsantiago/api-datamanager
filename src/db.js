@@ -1,14 +1,16 @@
-import { createPool } from "mysql2/promise";
-import {
+const { createPool } = require("mysql2/promise");
+//const mysql = require("mysql2/promise");
+
+const {
   DB_DATABASE,
   DB_HOST,
   DB_PASSWORD,
   DB_PORT,
   DB_USER,
   DB_FLAGS
-} from "./config.js";
+} = require("./config.js");
 
-export const pool = createPool({
+const pool = createPool({
   host: DB_HOST,
   user: DB_USER,
   password: DB_PASSWORD,
@@ -16,3 +18,9 @@ export const pool = createPool({
   database: DB_DATABASE,
   flags: DB_FLAGS
 });
+
+// pool.query("SELECT * FROM devices") {
+//    console.log(rows);
+// });
+
+module.exports = pool;

@@ -1,5 +1,39 @@
-import { Router } from "express";
-import {
+//import { Router } from "express";
+const Router = require("express").Router;
+
+// import {
+//   getUserProfile,
+//   userRegister,
+//   userLogin,
+//   setLastSession,
+//   getLastSession,
+//   closeLastSession,
+//   setHoraEgresoVigilador,
+//   addPuestoVigilador,
+//   getPersonal,
+//   getClientes,
+//   getCliente,
+//   getAllObjetivos,
+//   getObjetivos,
+//   requestCoordinate,
+//   getCounter,
+//   incrementCounter,
+//   decrementCounter,
+//   getDevice,
+//   addDevice,
+//   getAllDevices,
+//   deleteDevice,
+//   updateDevice,
+//   addRequestDevice,
+//   getRequestDevices,
+//   countPending,
+//   statusAdded,
+//   deleteRequestDevice,
+//   deleteAllRequestDevice,
+//   getPuestos
+// } from "../controllers/employees.controller.js";
+
+const {
   getUserProfile,
   userRegister,
   userLogin,
@@ -29,7 +63,9 @@ import {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos
-} from "../controllers/employees.controller.js";
+  } = require("../controllers/employees.controller.js");
+
+
 
 const router = Router();
 
@@ -135,4 +171,5 @@ router.delete("/request_device", deleteAllRequestDevice );
 router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 
 
-export default router;
+//export default router;
+module.exports = router;

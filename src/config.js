@@ -1,12 +1,14 @@
-import { config } from "dotenv";
+const config = require ("dotenv").config;
 config();
 
-export const PORT = 3000;
-//export const PORT_HTTPS = 443;
+const PORT = process.env.PORT || 3000;
+//const PORT_HTTPS = process.env.PORT || 443;
 
-export const DB_HOST = "186.182.25.11";
-export const DB_USER = "firebasetest";
-export const DB_PASSWORD = "N1l9wza3eB4y";
-export const DB_DATABASE = "gsmreplica";
-export const DB_PORT = 3306;
-export const DB_FLAGS = "-FOUND_ROWS";
+const DB_HOST = "186.182.25.11";
+const DB_USER = "firebasetest";
+const DB_PASSWORD = "N1l9wza3eB4y";
+const DB_DATABASE = "gsmreplica";
+const DB_PORT = 3306;
+const DB_FLAGS = "-FOUND_ROWS";
+
+module.exports = { PORT, DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE, DB_PORT, DB_FLAGS };

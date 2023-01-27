@@ -1,8 +1,11 @@
-import { pool } from "../db.js";
+//import { pool } from "../db.js";
+const { pool } = require("../db.js");
 
-export const index = (req, res) => res.json({ message: "welcome to my api" });
+const index = (req, res) => res.json({ message: "welcome to my api" });
 
-export const ping = async (req, res) => {
+const ping = async (req, res) => {
   const [result] = await pool.query('SELECT "pong" as result');
   res.json(result[0]);
 };
+
+module.exports = { index, ping };

@@ -1,13 +1,15 @@
-import { pool } from "../db.js";
-import { createRequire } from "module";
-const require = createRequire(import.meta.url);
+//import { pool } from "../db.js";
+const pool = require("../db.js");
+//import { createRequire } from "module";
+//const require = createRequire(import.meta.url);
 const bcryptjs = require('bcryptjs');
 
 // TABLE USERS
 
 //funcion que me devuelva si el usuario esta en la tabla de users y y me traiga el valor de perfil
 
-export const getUserProfile = async (req, res) => {
+//export const getUserProfile = async (req, res) => {
+const getUserProfile = async (req, res) => {
   try {
     const { persCodi } = req.params;
     const [result] = await pool.query("SELECT USER_PERF FROM users WHERE USER_CODI = ? ",
@@ -18,7 +20,7 @@ export const getUserProfile = async (req, res) => {
   }
 };
 
-export const userRegister = async (req, res) => {
+const userRegister = async (req, res) => {
   try {
     const { user_codi, user_lega, user_perf, user_pass } = req.body;
     let user_pass_encrypt = await bcryptjs.hash(user_pass, 8);
@@ -34,7 +36,7 @@ export const userRegister = async (req, res) => {
   }
 };
 
-export const userLogin = async (req, res) => {
+const userLogin = async (req, res) => {
   try {
     const { user_lega, user_pass } = req.body;
     let user_pass_encrypt = await bcryptjs.hash(user_pass, 8);
@@ -56,7 +58,7 @@ export const userLogin = async (req, res) => {
 
 // TABLE LAST_SESSION
 
-export const setLastSession = async (req, res) => {
+const setLastSession = async (req, res) => {
   try {
     const { last_cper, last_ccli,	last_cobj,	last_fech,	last_dhor,	last_hhor,	last_usua,	last_pues,	last_npue, last_esta,	last_ncli,	last_nobj,	last_dhre, last_time } = req.body;
     const [result] = await pool.query(
@@ -69,7 +71,7 @@ export const setLastSession = async (req, res) => {
   }
 };
 
-export const getLastSession = async (req, res) => {
+const getLastSession = async (req, res) => {
   try {
     const { persCodi } = req.params;
     const [rows] = await pool.query("SELECT * FROM last_session WHERE LAST_CPER = ? ",
@@ -80,7 +82,7 @@ export const getLastSession = async (req, res) => {
   }
 };
 
-export const closeLastSession = async (req, res) => {
+const closeLastSession = async (req, res) => {
   try {
     const { persCodi } = req.params;
     const [result] = await pool.query("UPDATE last_session SET LAST_ESTA = 0 WHERE LAST_CPER = ?",
@@ -97,7 +99,7 @@ export const closeLastSession = async (req, res) => {
 
 // TABLE ASIGVIGI
 
-export const setHoraEgresoVigilador = async (req, res) => {
+const setHoraEgresoVigilador = async (req, res) => {
   try {
     const { codPuesto, codVigi, timestamp } = req.params;
     const { horaEgreso } = req.body
@@ -113,7 +115,7 @@ export const setHoraEgresoVigilador = async (req, res) => {
   }
 };
 
-export const addPuestoVigilador = async (req, res) => {
+const addPuestoVigilador = async (req, res) => {
   try {
     const { asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm } = req.body;
     const [result] = await pool.query(
@@ -129,7 +131,7 @@ export const addPuestoVigilador = async (req, res) => {
 
 // TABLE PERSONAL
 
-export const getPersonal = async (req, res) => {
+const getPersonal = async (req, res) => {
   try {
     const { nroLegajo } = req.params;
     const [rows] = await pool.query("SELECT PERS_CODI, TRIM(PERS_NOMB) AS PERS_NOMB, PERS_NDOC, PERS_FNAC, PERS_SECT, PERS_FEGR FROM personal WHERE PERS_EMPR=1 AND PERS_LEGA = ? ",
@@ -142,7 +144,7 @@ export const getPersonal = async (req, res) => {
 
 // TABLE OBJETIVOS (CLIENTES)
 
-export const getClientes = async (req, res) => {
+const getClientes = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT OBJE_CODI, TRIM(OBJE_NOMB) AS OBJE_NOMB FROM objetivo WHERE OBJE_EMPR=1 AND OBJE_BAJA IS NULL ORDER BY OBJE_NOMB ASC");
     res.json(rows);
@@ -151,7 +153,7 @@ export const getClientes = async (req, res) => {
   }
 };
 
-export const getCliente = async (req, res) => {
+const getCliente = async (req, res) => {
   try {
     const { nombreCliente } = req.params;
     const [rows] = await pool.query("SELECT OBJE_CODI, TRIM(OBJE_NOMB) AS OBJE_NOMB FROM objetivo WHERE OBJE_EMPR=1 AND OBJE_BAJA IS NULL AND OBJE_NOMB=?",
@@ -164,7 +166,7 @@ export const getCliente = async (req, res) => {
 
 // TABLE PUESGRUP (OBJETIVOS)
 
-export const getAllObjetivos = async (req, res) => {
+const getAllObjetivos = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puestos, puesgrup WHERE PUES_GRUP=GRUP_CODI AND OBJE_BAJA IS NULL");
     res.json(rows);
@@ -173,7 +175,7 @@ export const getAllObjetivos = async (req, res) => {
   }
 };
 
-export const getObjetivos = async (req, res) => {
+const getObjetivos = async (req, res) => {
   try {
     const { idCliente } = req.params;
     const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puestos, puesgrup WHERE PUES_GRUP=GRUP_CODI AND PUES_OBJE = ? AND OBJE_BAJA IS NULL AND PUES_TIPO != 3",
@@ -184,7 +186,7 @@ export const getObjetivos = async (req, res) => {
   }
 };
 
-export const requestCoordinate = async (req, res) => {
+const requestCoordinate = async (req, res) => {
   try {
     const { idObjetivo } = req.params;
     const [result] = await pool.query("SELECT OBJE_MAPA FROM puesgrup WHERE GRUP_CODI= ?",
@@ -197,7 +199,7 @@ export const requestCoordinate = async (req, res) => {
 
 // TABLE DEVICES
 
-export const getDevice = async (req, res) => {
+const getDevice = async (req, res) => {
   try {
     const { androidID } = req.params;
     const [rows] = await pool.query("SELECT * FROM devices WHERE DEVI_ANID = ?",
@@ -208,7 +210,7 @@ export const getDevice = async (req, res) => {
   }
 };
 
-export const addDevice = async (req, res) => {
+const addDevice = async (req, res) => {
   try {
     const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin } = req.body;
     const [result] = await pool.query(
@@ -221,7 +223,7 @@ export const addDevice = async (req, res) => {
   }
 };
 
-export const getAllDevices = async (req, res) => {
+const getAllDevices = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM devices");
     res.json(rows);
@@ -230,7 +232,7 @@ export const getAllDevices = async (req, res) => {
   }
 };
 
-export const deleteDevice = async (req, res) => {
+const deleteDevice = async (req, res) => {
   try {
     const { androidID } = req.params;
     const [result] = await pool.query("DELETE FROM devices WHERE DEVI_ANID = ?",
@@ -245,7 +247,7 @@ export const deleteDevice = async (req, res) => {
   }
 };
 
-export const updateDevice = async (req, res) => {
+const updateDevice = async (req, res) => {
   try {
     const { devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_ncli,	devi_nobj, devi_ubic, devi_coor, devi_radi, devi_anid } = req.body;
     const [result] = await pool.query("UPDATE devices SET DEVI_NLIN=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?,	DEVI_NCLI=?, DEVI_NOBJ=?, DEVI_UBIC=?, DEVI_COOR=?, DEVI_RADI=? WHERE DEVI_ANID = ?",
@@ -263,7 +265,7 @@ export const updateDevice = async (req, res) => {
 
 // TABLE NOTIFICATION
 
-export const getCounter = async (req, res) => {
+const getCounter = async (req, res) => {
   try {
     const { nameCounter } = req.params;
     const [result] = await pool.query("SELECT counter FROM notification WHERE name = ? ",
@@ -274,7 +276,7 @@ export const getCounter = async (req, res) => {
   }
 };
 
-export const incrementCounter = async (req, res) => {
+const incrementCounter = async (req, res) => {
   try {
     const { nameCounter } = req.params;
     const [result] = await pool.query("UPDATE notification SET counter = counter + 1 WHERE name = ?",
@@ -289,7 +291,7 @@ export const incrementCounter = async (req, res) => {
   }
 };
 
-export const decrementCounter = async (req, res) => {
+const decrementCounter = async (req, res) => {
   try {
     const { nameCounter } = req.params;
     const [result] = await pool.query("UPDATE notification SET counter = counter - 1 WHERE name = ?",
@@ -306,7 +308,7 @@ export const decrementCounter = async (req, res) => {
 
 // TABLE REQUEST DEVICES
 
-export const getRequestDevices = async (req, res) => {
+const getRequestDevices = async (req, res) => {
   try {
     const [rows] = await pool.query("SELECT * FROM request_device");
     res.json(rows);
@@ -315,7 +317,7 @@ export const getRequestDevices = async (req, res) => {
   }
 };
 
-export const countPending = async (req, res) => {
+const countPending = async (req, res) => {
   try {
     const { nameCounter } = req.params;
     const [result] = await pool.query("SELECT COUNT(*) AS counter FROM request_device WHERE RDEV_ESTA = 'pending' ");
@@ -325,7 +327,7 @@ export const countPending = async (req, res) => {
   }
 };
 
-export const addRequestDevice = async (req, res) => {
+const addRequestDevice = async (req, res) => {
   try {
     const { rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin } = req.body;
     const [result] = await pool.query(
@@ -338,7 +340,7 @@ export const addRequestDevice = async (req, res) => {
   }
 };
 
-export const statusAdded = async (req, res) => {
+const statusAdded = async (req, res) => {
   try {
     const { androidID } = req.params;
     const [result] = await pool.query("UPDATE request_device SET RDEV_ESTA = 'added' WHERE RDEV_ANID = ?",
@@ -353,7 +355,7 @@ export const statusAdded = async (req, res) => {
   }
 };
 
-export const deleteRequestDevice = async (req, res) => {
+const deleteRequestDevice = async (req, res) => {
   try {
     const { androidID } = req.params;
     const [result] = await pool.query("DELETE FROM request_device WHERE RDEV_ANID = ?",
@@ -368,7 +370,7 @@ export const deleteRequestDevice = async (req, res) => {
   }
 };
 
-export const deleteAllRequestDevice = async (req, res) => {
+const deleteAllRequestDevice = async (req, res) => {
   try {
     const [result] = await pool.query("DELETE FROM request_device");
     res.status(201).json({ result: 1}); // Todas las solicitudes eliminadas
@@ -379,7 +381,7 @@ export const deleteAllRequestDevice = async (req, res) => {
 
 // TABLE PUESTOS
 
-export const getPuestos = async (req, res) => {
+const getPuestos = async (req, res) => {
   try {
     const { idCliente, idObjetivo } = req.params;
     const [rows] = await pool.query("SELECT * FROM puestos WHERE PUES_OBJE = ? AND PUES_GRUP = ? AND PUES_TIPO != 3",
@@ -389,3 +391,35 @@ export const getPuestos = async (req, res) => {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
+
+module.exports = {
+  getUserProfile,
+  userRegister,
+  userLogin,
+  setLastSession,
+  getLastSession,
+  closeLastSession,
+  setHoraEgresoVigilador,
+  addPuestoVigilador,
+  getPersonal,
+  getClientes,
+  getCliente,
+  getAllObjetivos,
+  getObjetivos,
+  requestCoordinate,
+  getCounter,
+  incrementCounter,
+  decrementCounter,
+  getDevice,
+  addDevice,
+  getAllDevices,
+  deleteDevice,
+  updateDevice,
+  addRequestDevice,
+  getRequestDevices,
+  countPending,
+  statusAdded,
+  deleteRequestDevice,
+  deleteAllRequestDevice,
+  getPuestos
+  };
