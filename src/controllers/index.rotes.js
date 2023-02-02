@@ -1,5 +1,5 @@
 //import { pool } from "../db.js";
-const { pool } = require("../db.js");
+const pool = require("../db.js");
 
 const index = (req, res) => res.json({ message: "welcome to my api" });
 

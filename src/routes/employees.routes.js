@@ -130,7 +130,7 @@ router.get("/objetivos/coordinate/:idObjetivo", requestCoordinate)
 // TABLE DEVICE
 
 //GET Device
-router.post("/devices/:androidID", getDevice);
+router.get("/devices/:androidID", getDevice);
 
 //INSERT Device
 router.post("/devices", addDevice);
