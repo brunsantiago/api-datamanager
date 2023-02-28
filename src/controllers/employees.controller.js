@@ -60,10 +60,10 @@ const userLogin = async (req, res) => {
 
 const setLastSession = async (req, res) => {
   try {
-    const { last_cper, last_ccli,	last_cobj,	last_fech,	last_dhor,	last_hhor,	last_usua,	last_pues,	last_npue, last_esta,	last_ncli,	last_nobj,	last_dhre, last_time } = req.body;
+    const { last_cper, last_ccli,	last_cobj,	last_fech,	last_dhor,	last_hhor,	last_usua,	last_pues,	last_npue, last_esta,	last_ncli,	last_nobj,	last_dhre, last_time, last_asid} = req.body;
     const [result] = await pool.query(
-      "INSERT INTO last_session (LAST_CPER, LAST_CCLI,	LAST_COBJ,	LAST_FECH,	LAST_DHOR,	LAST_HHOR,	LAST_USUA,	LAST_PUES,	LAST_NPUE, LAST_ESTA, LAST_NCLI, LAST_NOBJ, LAST_DHRE, LAST_TIME ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE LAST_CCLI=VALUES(last_ccli),	LAST_COBJ=VALUES(last_cobj),	LAST_FECH=VALUES(last_fech),	LAST_DHOR=VALUES(last_dhor),	LAST_HHOR=VALUES(last_hhor),	LAST_USUA=VALUES(last_usua),	LAST_PUES=VALUES(last_pues),	LAST_NPUE =VALUES(last_npue ),	LAST_ESTA =VALUES(last_esta),	LAST_NCLI =VALUES(last_ncli),	LAST_NOBJ =VALUES(last_nobj),	LAST_DHRE=VALUES(last_dhre), LAST_TIME=VALUES(last_time)",
-      [ last_cper, last_ccli,	last_cobj, last_fech,	last_dhor,	last_hhor,	last_usua,	last_pues,	last_npue, last_esta,	last_ncli,	last_nobj,	last_dhre, last_time ]
+      "INSERT INTO last_session (LAST_CPER, LAST_CCLI,	LAST_COBJ,	LAST_FECH,	LAST_DHOR,	LAST_HHOR,	LAST_USUA,	LAST_PUES,	LAST_NPUE, LAST_ESTA, LAST_NCLI, LAST_NOBJ, LAST_DHRE, LAST_TIME, LAST_ASID ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE LAST_CCLI=VALUES(last_ccli),	LAST_COBJ=VALUES(last_cobj),	LAST_FECH=VALUES(last_fech),	LAST_DHOR=VALUES(last_dhor),	LAST_HHOR=VALUES(last_hhor),	LAST_USUA=VALUES(last_usua),	LAST_PUES=VALUES(last_pues),	LAST_NPUE =VALUES(last_npue ),	LAST_ESTA =VALUES(last_esta),	LAST_NCLI =VALUES(last_ncli),	LAST_NOBJ =VALUES(last_nobj),	LAST_DHRE=VALUES(last_dhre), LAST_TIME=VALUES(last_time), LAST_ASID=VALUES(last_asid)",
+      [ last_cper, last_ccli,	last_cobj, last_fech,	last_dhor,	last_hhor,	last_usua,	last_pues,	last_npue, last_esta,	last_ncli,	last_nobj,	last_dhre, last_time, last_asid ]
     );
     return res.json({ result : result.affectedRows });
   } catch (error) {
@@ -101,10 +101,11 @@ const closeLastSession = async (req, res) => {
 
 const setHoraEgresoVigilador = async (req, res) => {
   try {
-    const { codPuesto, codVigi, timestamp } = req.params;
+    //const { codPuesto, codVigi, timestamp } = req.params;
+    const { asigId } = req.params;
     const { horaEgreso } = req.body
-    const [result] = await pool.query("UPDATE asigvigi SET ASIG_HHOR = ? WHERE ASIG_PUES = ? AND ASIG_VIGI = ? AND ASIG_TIME = ?",
-    [ horaEgreso, codPuesto, codVigi, timestamp ]);
+    const [result] = await pool.query("UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
+    [ horaEgreso, asigId]);
     if (result.affectedRows === 0){
       return res.status(404).json({ result: 0 });
     }else{
@@ -116,13 +117,17 @@ const setHoraEgresoVigilador = async (req, res) => {
 };
 
 const addPuestoVigilador = async (req, res) => {
+  const randomId = randomString(12);
   try {
     const { asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO asigvigi (ASIG_OBJE,	ASIG_VIGI,	ASIG_FECH,	ASIG_DHOR,	ASIG_HHOR,	ASIG_AUSE,	ASIG_DETA,	ASIG_VISA,	ASIG_OBSE,	ASIG_USUA,	ASIG_TIME,	ASIG_FACT,	ASIG_PUES,	ASIG_BLOQ,	ASIG_ESTA,	ASIG_FACM ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [ asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm ]
+      "INSERT INTO asigvigi_app (ASIG_ID, ASIG_OBJE,	ASIG_VIGI,	ASIG_FECH,	ASIG_DHOR,	ASIG_HHOR,	ASIG_AUSE,	ASIG_DETA,	ASIG_VISA,	ASIG_OBSE,	ASIG_USUA,	ASIG_TIME,	ASIG_FACT,	ASIG_PUES,	ASIG_BLOQ,	ASIG_ESTA,	ASIG_FACM ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ randomId, asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm ]
     );
-    return res.json({ result : result.affectedRows });
+    console.log(result);
+    return res.json({ result : result.affectedRows,
+                      row : result
+                    });
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong"+error });
   }
@@ -212,10 +217,10 @@ const getDevice = async (req, res) => {
 
 const addDevice = async (req, res) => {
   try {
-    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin } = req.body;
+    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin ]
+      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic ]
     );
     res.json({ result: 0 } );
   } catch (error) {
@@ -391,6 +396,28 @@ const getPuestos = async (req, res) => {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
+
+/**
+ * Pseudo-random string generator
+ * http://stackoverflow.com/a/27872144/383904
+ * Default: return a random alpha-numeric string
+ *
+ * @param {Integer} len Desired length
+ * @param {String} an Optional (alphanumeric), "a" (alpha), "n" (numeric)
+ * @return {String}
+ */
+function randomString(len, an) {
+  an = an && an.toLowerCase();
+  var str = "",
+    i = 0,
+    min = an == "a" ? 10 : 0,
+    max = an == "n" ? 10 : 62;
+  for (; i++ < len;) {
+    var r = Math.random() * (max - min) + min << 0;
+    str += String.fromCharCode(r += r > 9 ? r < 36 ? 55 : 61 : 48);
+  }
+  return str;
+}
 
 module.exports = {
   getUserProfile,

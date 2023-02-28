@@ -96,7 +96,7 @@ router.patch("/last_session/:persCodi", closeLastSession);
 // TABLE ASIGVIGI
 
 // PATCH Cargar Hora Egreso Vigilador
-router.patch("/asigvigi/:codPuesto/:codVigi/:timestamp", setHoraEgresoVigilador)
+router.patch("/asigvigi/:asigId", setHoraEgresoVigilador)
 
 // POST Cargar Hora Ingreso Vigilador
 router.post("/asigvigi", addPuestoVigilador);
