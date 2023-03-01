@@ -124,10 +124,10 @@ const addPuestoVigilador = async (req, res) => {
       "INSERT INTO asigvigi_app (ASIG_ID, ASIG_OBJE,	ASIG_VIGI,	ASIG_FECH,	ASIG_DHOR,	ASIG_HHOR,	ASIG_AUSE,	ASIG_DETA,	ASIG_VISA,	ASIG_OBSE,	ASIG_USUA,	ASIG_TIME,	ASIG_FACT,	ASIG_PUES,	ASIG_BLOQ,	ASIG_ESTA,	ASIG_FACM ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [ randomId, asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm ]
     );
-    console.log(result);
-    return res.json({ result : result.affectedRows,
-                      row : result
-                    });
+
+    return res.status(201).json({ result : result.affectedRows,
+                                  asigId : randomId
+                                });
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong"+error });
   }
