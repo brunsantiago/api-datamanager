@@ -143,7 +143,7 @@ const addPuestoVigilador = async (req, res) => {
     );
 
     return res.status(201).json({ result : result.affectedRows,
-                                  asigId : result.insertId
+                                  //asigId : result.insertId,
                                 });
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong"+error });
