@@ -190,7 +190,7 @@ const getObjetivos = async (req, res) => {
 const requestCoordinate = async (req, res) => {
   try {
     const { idObjetivo } = req.params;
-    const [result] = await pool.query("SELECT OBJE_MAPA FROM puesgrup WHERE GRUP_CODI= ?",
+    const [result] = await pool.query("SELECT OBJE_COOR FROM puesgrup WHERE GRUP_CODI= ?",
     [ idObjetivo ]);
     res.json(result[0]);
   } catch (error) {
