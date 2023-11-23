@@ -37,6 +37,7 @@ const {
   getUserProfile,
   userRegister,
   userLogin,
+  userRecoveryKey,
   setLastSession,
   getLastSession,
   closeLastSession,
