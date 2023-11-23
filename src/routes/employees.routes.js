@@ -80,8 +80,8 @@ router.post("/register", userRegister);
 //POST Login de usuario
 router.post("/login", userLogin);
 
-//UPDATE User Key
-router.post("/recoveryKey", userRecoveryKey);
+//PATCH User Key
+router.patch("/recoveryKey/:persCodi", userRecoveryKey);
 
 
 // TABLE LAST SESION
