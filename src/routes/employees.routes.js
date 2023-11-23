@@ -37,7 +37,7 @@ const {
   getUserProfile,
   userRegister,
   userLogin,
-  userRecoveryKey,
+  // userRecoveryKey,
   setLastSession,
   getLastSession,
   closeLastSession,
@@ -82,7 +82,7 @@ router.post("/register", userRegister);
 router.post("/login", userLogin);
 
 //PATCH User Key
-router.patch("/recoveryKey/:persCodi", userRecoveryKey);
+// router.patch("/recoveryKey/:persCodi", userRecoveryKey);
 
 
 // TABLE LAST SESION
