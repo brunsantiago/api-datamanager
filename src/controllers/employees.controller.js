@@ -56,22 +56,22 @@ const userLogin = async (req, res) => {
   }
 };
 
-// const userRecoveryKey = async (req, res) => {
-//   try {
-//     const { persCodi } = req.params;
-//     const { user_pass } = req.body;
-//     let user_pass_encrypt = await bcryptjs.hash(user_pass, 8);
-//     const [result] = await pool.query("UPDATE users SET USER_PASS = ? WHERE USER_CODI = ?",
-//     [ user_pass_encrypt, persCodi]);
-//     if (result.affectedRows === 0){
-//       return res.status(404).json({ result: 0 }); // No se encontro Usuario
-//     }else{
-//       res.status(201).json({ result: 1 }); // Usuario Modificado
-//     }
-//   } catch (error) {
-//     return res.status(500).json({ message: "Something goes wrong" + error });
-//   }
-// };
+const userRecoveryKey = async (req, res) => {
+  try {
+    const { persCodi } = req.params;
+    const { user_pass } = req.body;
+    let user_pass_encrypt = await bcryptjs.hash(user_pass, 8);
+    const [result] = await pool.query("UPDATE users SET USER_PASS = ? WHERE USER_CODI = ?",
+    [ user_pass_encrypt, persCodi]);
+    if (result.affectedRows === 0){
+      return res.status(404).json({ result: 0 }); // No se encontro Usuario
+    }else{
+      res.status(201).json({ result: 1 }); // Usuario Modificado
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" + error });
+  }
+};
 
 // TABLE LAST_SESSION
 
@@ -119,7 +119,7 @@ const closeLastSession = async (req, res) => {
 const setHoraEgresoVigilador = async (req, res) => {
   try {
     const { asigId } = req.params;
-    const { horaEgreso } = req.body
+    const { horaEgreso } = req.body;
     const [result] = await pool.query("UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
     [ horaEgreso, asigId]);
     if (result.affectedRows === 0){
