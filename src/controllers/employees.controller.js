@@ -56,6 +56,22 @@ const userLogin = async (req, res) => {
   }
 };
 
+const userRecoveryKey = async (req, res) => {
+  try {
+    const { user_codi, user_pass } = req.body;
+    let user_pass_encrypt = await bcryptjs.hash(user_pass, 8);
+    const [result] = await pool.query("UPDATE users SET USER_PASS = ? WHERE USER_CODI = ?",
+    [ user_pass_encrypt, user_codi]);
+    if (result.affectedRows === 0){
+      return res.status(404).json({ result: 0 }); // No se encontro Usuario
+    }else{
+      res.status(201).json({ result: 1 }); // Usuario Modificado
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" + error });
+  }
+};
+
 // TABLE LAST_SESSION
 
 const setLastSession = async (req, res) => {
