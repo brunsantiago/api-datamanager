@@ -82,7 +82,7 @@ router.post("/register", userRegister);
 router.post("/login", userLogin);
 
 //PATCH User Key
-router.patch("/recovery_key/:persCodi", userRecoveryKey);
+router.patch("/recovery_key", userRecoveryKey);
 
 
 // TABLE LAST SESION
