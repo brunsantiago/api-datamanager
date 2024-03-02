@@ -413,7 +413,7 @@ const getPuestos = async (req, res) => {
 
 const getLastVersion = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT * FROM app_version WHERE version_code = (SELECT MAX(version_code) FROM app_version"));
+    const [rows] = await pool.query("SELECT * FROM app_version WHERE version_code = (SELECT MAX(version_code) FROM app_version");
     res.json(rows);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
