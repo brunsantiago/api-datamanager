@@ -1,37 +1,4 @@
-//import { Router } from "express";
 const Router = require("express").Router;
-
-// import {
-//   getUserProfile,
-//   userRegister,
-//   userLogin,
-//   setLastSession,
-//   getLastSession,
-//   closeLastSession,
-//   setHoraEgresoVigilador,
-//   addPuestoVigilador,
-//   getPersonal,
-//   getClientes,
-//   getCliente,
-//   getAllObjetivos,
-//   getObjetivos,
-//   requestCoordinate,
-//   getCounter,
-//   incrementCounter,
-//   decrementCounter,
-//   getDevice,
-//   addDevice,
-//   getAllDevices,
-//   deleteDevice,
-//   updateDevice,
-//   addRequestDevice,
-//   getRequestDevices,
-//   countPending,
-//   statusAdded,
-//   deleteRequestDevice,
-//   deleteAllRequestDevice,
-//   getPuestos
-// } from "../controllers/employees.controller.js";
 
 const {
   getUserProfile,
@@ -63,7 +30,8 @@ const {
   statusAdded,
   deleteRequestDevice,
   deleteAllRequestDevice,
-  getPuestos
+  getPuestos,
+  getLastVersion
   } = require("../controllers/employees.controller.js");
 
 
@@ -173,6 +141,11 @@ router.delete("/request_device", deleteAllRequestDevice );
 
 // GET Puestos Activos por Cliente y Objetivo
 router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
+
+//TABLE APP VERSION
+
+//GET Ultima version de la App disponible
+router.get("/app_version/last_version", getLastVersion);
 
 
 //export default router;

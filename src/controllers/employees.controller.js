@@ -409,6 +409,18 @@ const getPuestos = async (req, res) => {
   }
 };
 
+// TABLE APP version
+
+const getLastVersion = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM app_version WHERE version_code = (SELECT MAX(version_code) FROM app_version"));
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+
 /**
  * Pseudo-random string generator
  * http://stackoverflow.com/a/27872144/383904
@@ -461,5 +473,6 @@ module.exports = {
   statusAdded,
   deleteRequestDevice,
   deleteAllRequestDevice,
-  getPuestos
+  getPuestos,
+  getLastVersion
   };
