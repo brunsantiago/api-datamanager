@@ -1,6 +1,7 @@
 const Router = require("express").Router;
 
 const {
+  getAllUsers,
   getUserProfile,
   userRegister,
   userLogin,
@@ -39,6 +40,9 @@ const {
 const router = Router();
 
 // TABLE USERS
+
+// GET Obtener todos los usuarios
+router.get("/users", getAllUsers);
 
 // GET Obtener perfil de usuario
 router.get("/users/:persCodi", getUserProfile);

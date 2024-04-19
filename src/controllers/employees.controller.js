@@ -6,9 +6,15 @@ const bcryptjs = require('bcryptjs');
 
 // TABLE USERS
 
-//funcion que me devuelva si el usuario esta en la tabla de users y y me traiga el valor de perfil
+const getAllUsers = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT USER_LEGA, PERS_NOMB, USER_PERF, PERS_SECT, PERS_FEGR FROM users JOIN personal ON users.USER_CODI = personal.PERS_CODI;");
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
 
-//export const getUserProfile = async (req, res) => {
 const getUserProfile = async (req, res) => {
   try {
     const { persCodi } = req.params;
@@ -444,6 +450,7 @@ function randomString(len, an) {
 }
 
 module.exports = {
+  getAllUsers,
   getUserProfile,
   userRegister,
   userLogin,
