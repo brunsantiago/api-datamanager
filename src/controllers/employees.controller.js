@@ -8,9 +8,10 @@ const bcryptjs = require('bcryptjs');
 
 const getAllUsers = async (req, res) => {
   try {
-    const [rows] = await pool.query("SELECT USER_LEGA, PERS_NOMB, USER_PERF, PERS_SECT, PERS_FEGR FROM users JOIN personal ON users.USER_CODI = personal.PERS_CODI;");
+    const [rows] = await pool.query("SELECT USER_CODI, USER_LEGA, USER_PERF, PERS_NOMB, PERS_SECT, PERS_FEGR FROM users JOIN personal ON users.USER_CODI = personal.PERS_CODI;");
     res.json(rows);
-  } catch (error) {
+  }
+  catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
@@ -73,10 +74,26 @@ const userRecoveryKey = async (req, res) => {
     }else{
       res.status(201).json({ result: 1 }); // Usuario Modificado
     }
-  } catch (error) {
+  }
+  catch (error) {
     return res.status(500).json({ message: "Something goes wrong" + error });
   }
 };
+
+const deleteUser = async (req, res) => {
+  try {
+    const { userCodi } = req.params;
+    const [result] = await pool.query("DELETE FROM users WHERE USER_CODI = ?",[ userCodi ]);
+    if (result.affectedRows === 0){
+      res.status(404).json({ result: 0 }); // UserCodi no econtrado
+    }else{
+      res.status(201).json({ result: 1}); // Usuario Eliminado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
+  }
+};
+
 
 // TABLE LAST_SESSION
 
@@ -455,6 +472,7 @@ module.exports = {
   userRegister,
   userLogin,
   userRecoveryKey,
+  deleteUser,
   setLastSession,
   getLastSession,
   closeLastSession,

@@ -6,6 +6,7 @@ const {
   userRegister,
   userLogin,
   userRecoveryKey,
+  deleteUser,
   setLastSession,
   getLastSession,
   closeLastSession,
@@ -55,6 +56,9 @@ router.post("/login", userLogin);
 
 //PATCH User Key
 router.patch("/recovery_key", userRecoveryKey);
+
+//DELETE User
+router.delete("/users/:userCodi", deleteUser );
 
 
 // TABLE LAST SESION
