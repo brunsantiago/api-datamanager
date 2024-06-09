@@ -46,7 +46,8 @@ const {
   getLastSessionBrouclean,
   closeLastSessionBrouclean,
   setHoraEgresoBrouclean,
-  getLastVersionBrouclean
+  getLastVersionBrouclean,
+  userRecoveryKeyBrouclean
   } = require("../controllers/employees.controller.js");
 
 
@@ -168,8 +169,9 @@ router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 //GET Ultima version de la App disponible
 router.get("/app_version/last_version", getLastVersion);
 
-
+////////////////////////////////////////////////////////////////////////////////
 //// BROUCLEAN FUNCTIONS ///////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 
 // TABLE OBJETIVO (CLIENTES)
 
@@ -196,6 +198,9 @@ router.post("/brouclean/login", userLoginBrouclean);
 
 // GET Obtener perfil de usuario
 router.get("/brouclean/users/:persCodi", getUserProfileBrouclean);
+
+//PATCH User Key
+router.patch("/brouclean/recovery_key", userRecoveryKeyBrouclean);
 
 // TABLE DEVICE
 
