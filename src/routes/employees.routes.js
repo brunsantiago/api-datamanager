@@ -33,7 +33,20 @@ const {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos,
-  getLastVersion
+  getLastVersion,
+  getClientesBrouclean,
+  addRequestDeviceBrouclean,
+  getPersonalBrouclean,
+  userRegisterBrouclean,
+  userLoginBrouclean,
+  getUserProfileBrouclean,
+  getAllDevicesBrouclean,
+  addPuestoBrouclean,
+  setLastSessionBrouclean,
+  getLastSessionBrouclean,
+  closeLastSessionBrouclean,
+  setHoraEgresoBrouclean,
+  getLastVersionBrouclean
   } = require("../controllers/employees.controller.js");
 
 
@@ -154,6 +167,66 @@ router.get("/puestos/:idCliente/:idObjetivo", getPuestos);
 
 //GET Ultima version de la App disponible
 router.get("/app_version/last_version", getLastVersion);
+
+
+//// BROUCLEAN FUNCTIONS ///////////////////////////////////////////////////////
+
+// TABLE OBJETIVO (CLIENTES)
+
+// GET all Clientes (Activos - BROUCLEAN)
+router.get("/brouclean/clientes", getClientesBrouclean);
+
+// TABLE REQUEST DEVICE
+
+// INSERT Request Device
+router.post("/brouclean/request_device", addRequestDeviceBrouclean);
+
+// TABLE PERSONAL
+
+// GET Personal (BROUCLEAN)
+router.get("/brouclean/personal/:nroLegajo", getPersonalBrouclean);
+
+// TABLE USERS
+
+//POST Registro de usuario
+router.post("/brouclean/register", userRegisterBrouclean);
+
+//POST Login de usuario
+router.post("/brouclean/login", userLoginBrouclean);
+
+// GET Obtener perfil de usuario
+router.get("/brouclean/users/:persCodi", getUserProfileBrouclean);
+
+// TABLE DEVICE
+
+//GET Device
+router.get("/brouclean/devices", getAllDevicesBrouclean);
+
+// TABLE ASIG BROUCLEAN
+
+// POST Cargar Hora Ingreso Personal
+router.post("/brouclean/asig_brouclean", addPuestoBrouclean);
+
+// PATCH Cargar Hora Egreso Personal
+router.patch("/brouclean/asig_brouclean/:asigId", setHoraEgresoBrouclean)
+
+// TABLE LAST SESION
+
+// POST Cargar Ultima Sesion
+router.post("/brouclean/last_session", setLastSessionBrouclean);
+
+// GET Cargar Ultima Sesion
+router.get("/brouclean/last_session/:persCodi", getLastSessionBrouclean);
+
+// PATCH Cerrar Ultima Sesion
+router.patch("/brouclean/last_session/:persCodi", closeLastSessionBrouclean);
+
+//TABLE APP VERSION
+
+//GET Ultima version de la App disponible
+router.get("/brouclean/app_version/last_version", getLastVersionBrouclean);
+
+
 
 
 //export default router;
