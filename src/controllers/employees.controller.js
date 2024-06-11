@@ -252,10 +252,10 @@ const getDevice = async (req, res) => {
 
 const addDevice = async (req, res) => {
   try {
-    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic } = req.body;
+    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic ]
+      "INSERT INTO devices VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers ]
     );
     res.json({ result: 0 } );
   } catch (error) {
@@ -483,10 +483,10 @@ const getRequestDevicesBrouclean = async (req, res) => {
 
 const addRequestDeviceBrouclean = async (req, res) => {
   try {
-    const { rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin } = req.body;
+    const { rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode, rdev_vers,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO request_device_brouclean (RDEV_ANID, RDEV_DATE, RDEV_ESTA, RDEV_CCLI, RDEV_COBJ, RDEV_MARC, RDEV_MODE,	RDEV_NOMB,	RDEV_NCLI,	RDEV_NOBJ,	RDEV_CPER, RDEV_NLIN ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE RDEV_DATE=VALUES(rdev_date), RDEV_ESTA=VALUES(rdev_esta), RDEV_CCLI=VALUES(rdev_ccli), RDEV_COBJ=VALUES(rdev_cobj), RDEV_MARC=VALUES(rdev_marc), RDEV_MODE=VALUES(rdev_mode),	RDEV_NOMB=VALUES(rdev_nomb),	RDEV_NCLI=VALUES(rdev_ncli),	RDEV_NOBJ=VALUES(rdev_nobj),	RDEV_CPER=VALUES(rdev_cper),	RDEV_NLIN=VALUES(rdev_nlin)",
-      [ rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin ]
+      "INSERT INTO request_device_brouclean (RDEV_ANID, RDEV_DATE, RDEV_ESTA, RDEV_CCLI, RDEV_COBJ, RDEV_MARC, RDEV_MODE, RDEV_VERS,	RDEV_NOMB,	RDEV_NCLI,	RDEV_NOBJ,	RDEV_CPER, RDEV_NLIN ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE RDEV_DATE=VALUES(rdev_date), RDEV_ESTA=VALUES(rdev_esta), RDEV_CCLI=VALUES(rdev_ccli), RDEV_COBJ=VALUES(rdev_cobj), RDEV_MARC=VALUES(rdev_marc), RDEV_MODE=VALUES(rdev_mode),	RDEV_VERS=VALUES(rdev_vers), RDEV_NOMB=VALUES(rdev_nomb),	RDEV_NCLI=VALUES(rdev_ncli),	RDEV_NOBJ=VALUES(rdev_nobj),	RDEV_CPER=VALUES(rdev_cper),	RDEV_NLIN=VALUES(rdev_nlin)",
+      [ rdev_anid,	rdev_date,	rdev_esta,	rdev_ccli,	rdev_cobj,	rdev_marc,	rdev_mode, rdev_vers,	rdev_nomb,	rdev_ncli,	rdev_nobj,	rdev_cper, rdev_nlin ]
     );
     return res.json({ result : result.affectedRows });
   } catch (error) {
@@ -659,14 +659,14 @@ const getAllDevicesBrouclean = async (req, res) => {
 
 const addDeviceBrouclean = async (req, res) => {
   try {
-    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic } = req.body;
+    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO devices_brouclean VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic ]
+      "INSERT INTO devices_brouclean VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli, devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic, devi_vers ]
     );
     res.json({ result: 0 } );
   } catch (error) {
-    res.json({ result: 1 });
+    res.json({ result: error });
   }
 };
 
@@ -679,6 +679,41 @@ const deleteDeviceBrouclean = async (req, res) => {
       res.status(404).json({ result: 0 }); // Android ID no econtrado
     }else{
       res.status(201).json({ result: 1}); // Dispositivo Eliminado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
+  }
+};
+
+const updateDeviceBrouclean = async (req, res) => {
+  // No es necesario cambiar todos los campos porque algunos estan bloqueados para su modificacion
+  try {
+    const { devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_ncli,	devi_nobj, devi_ubic, devi_coor, devi_radi, devi_anid} = req.body;
+    const [result] = await pool.query("UPDATE devices_brouclean SET DEVI_NLIN=?, DEVI_DATE=?, DEVI_ESTA=?, DEVI_CCLI=?, DEVI_COBJ=?,	DEVI_NCLI=?, DEVI_NOBJ=?, DEVI_UBIC=?, DEVI_COOR=?, DEVI_RADI=? WHERE DEVI_ANID = ?",
+    [ devi_nlin, devi_date,	devi_esta,	devi_ccli,	devi_cobj, devi_ncli,	devi_nobj, devi_ubic, devi_coor, devi_radi, devi_anid ]
+    );
+    if (result.affectedRows === 0){
+      res.status(200).json({ result: 0 }); // Android ID no econtrado o sin cambios
+    }else{
+      res.status(201).json({ result: 1}); // Dispositivo Actualizado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
+  }
+};
+
+const updateVersionDeviceBrouclean = async (req, res) => {
+  // No es necesario cambiar todos los campos porque algunos estan bloqueados para su modificacion
+  try {
+    const { androidId } = req.params;
+    const { appVersion } = req.body;
+    const [result] = await pool.query("UPDATE devices_brouclean SET DEVI_VERS=? WHERE DEVI_ANID = ?",
+    [ appVersion, androidId ]
+    );
+    if (result.affectedRows === 0){
+      res.status(200).json({ result: 0 }); // Android ID no econtrado o sin cambios
+    }else{
+      res.status(201).json({ result: 1}); // Dispositivo Actualizado
     }
   } catch (error) {
     res.status(500).json({ result: 2 }); // Error en el Servidor
@@ -850,5 +885,7 @@ module.exports = {
   deleteRequestDeviceBrouclean,
   deleteAllRequestDeviceBrouclean,
   getClienteBrouclean,
-  deleteDeviceBrouclean
+  deleteDeviceBrouclean,
+  updateDeviceBrouclean,
+  updateVersionDeviceBrouclean
   };

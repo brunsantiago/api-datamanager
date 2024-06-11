@@ -57,7 +57,9 @@ const {
   deleteRequestDeviceBrouclean,
   deleteAllRequestDeviceBrouclean,
   getClienteBrouclean,
-  deleteDeviceBrouclean
+  deleteDeviceBrouclean,
+  updateDeviceBrouclean,
+  updateVersionDeviceBrouclean
   } = require("../controllers/employees.controller.js");
 
 
@@ -246,6 +248,12 @@ router.post("/brouclean/devices", addDeviceBrouclean);
 
 //DELETE Device
 router.delete("/brouclean/devices/:androidID", deleteDeviceBrouclean);
+
+//UPDATE Device
+router.put("/brouclean/devices", updateDeviceBrouclean );
+
+//UPDATE Version Device
+router.patch("/brouclean/devices/:androidId", updateVersionDeviceBrouclean );
 
 // TABLE ASIG BROUCLEAN
 
