@@ -47,7 +47,17 @@ const {
   closeLastSessionBrouclean,
   setHoraEgresoBrouclean,
   getLastVersionBrouclean,
-  userRecoveryKeyBrouclean
+  userRecoveryKeyBrouclean,
+  getAllUsersBrouclean,
+  deleteUserBrouclean,
+  countPendingBrouclean,
+  getRequestDevicesBrouclean,
+  addDeviceBrouclean,
+  statusAddedBrouclean,
+  deleteRequestDeviceBrouclean,
+  deleteAllRequestDeviceBrouclean,
+  getClienteBrouclean,
+  deleteDeviceBrouclean
   } = require("../controllers/employees.controller.js");
 
 
@@ -178,10 +188,28 @@ router.get("/app_version/last_version", getLastVersion);
 // GET all Clientes (Activos - BROUCLEAN)
 router.get("/brouclean/clientes", getClientesBrouclean);
 
+// GET Cliente (Activo - BROUCLEAN)
+router.get("/brouclean/clientes/:nombreCliente", getClienteBrouclean);
+
 // TABLE REQUEST DEVICE
+
+//GET All Request Devices
+router.get("/brouclean/request_device", getRequestDevicesBrouclean);
 
 // INSERT Request Device
 router.post("/brouclean/request_device", addRequestDeviceBrouclean);
+
+//GET All Request Devices Pending
+router.get("/brouclean/request_device/count_pending", countPendingBrouclean);
+
+//PATCH Request Devices Change Status
+router.patch("/brouclean/request_device/:androidID", statusAddedBrouclean );
+
+//DELETE Request Devices
+router.delete("/brouclean/request_device/:androidID", deleteRequestDeviceBrouclean );
+
+//DELETE Request Devices
+router.delete("/brouclean/request_device", deleteAllRequestDeviceBrouclean );
 
 // TABLE PERSONAL
 
@@ -189,6 +217,9 @@ router.post("/brouclean/request_device", addRequestDeviceBrouclean);
 router.get("/brouclean/personal/:nroLegajo", getPersonalBrouclean);
 
 // TABLE USERS
+
+// GET Obtener todos los usuarios
+router.get("/brouclean/users", getAllUsersBrouclean);
 
 //POST Registro de usuario
 router.post("/brouclean/register", userRegisterBrouclean);
@@ -202,10 +233,19 @@ router.get("/brouclean/users/:persCodi", getUserProfileBrouclean);
 //PATCH User Key
 router.patch("/brouclean/recovery_key", userRecoveryKeyBrouclean);
 
+//DELETE User
+router.delete("/brouclean/users/:userCodi", deleteUserBrouclean );
+
 // TABLE DEVICE
 
 //GET Device
 router.get("/brouclean/devices", getAllDevicesBrouclean);
+
+//INSERT Device
+router.post("/brouclean/devices", addDeviceBrouclean);
+
+//DELETE Device
+router.delete("/brouclean/devices/:androidID", deleteDeviceBrouclean);
 
 // TABLE ASIG BROUCLEAN
 
@@ -230,7 +270,6 @@ router.patch("/brouclean/last_session/:persCodi", closeLastSessionBrouclean);
 
 //GET Ultima version de la App disponible
 router.get("/brouclean/app_version/last_version", getLastVersionBrouclean);
-
 
 
 

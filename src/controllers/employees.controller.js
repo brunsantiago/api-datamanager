@@ -459,7 +459,27 @@ const getClientesBrouclean = async (req, res) => {
   }
 };
 
+const getClienteBrouclean = async (req, res) => {
+  try {
+    const { nombreCliente } = req.params;
+    const [rows] = await pool.query("SELECT OBJE_CODI, TRIM(OBJE_NOMB) AS OBJE_NOMB FROM objetivo WHERE OBJE_EMPR=3 AND OBJE_BAJA IS NULL AND OBJE_NOMB=?",
+    [ nombreCliente ]);
+    res.json(rows);
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
 // TABLE REQUEST DEVICES
+
+const getRequestDevicesBrouclean = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT * FROM request_device_brouclean");
+    res.json(rows);
+  } catch (error) {
+    res.status(500).json({ message: "Something goes wrong" });
+  }
+};
 
 const addRequestDeviceBrouclean = async (req, res) => {
   try {
@@ -471,6 +491,55 @@ const addRequestDeviceBrouclean = async (req, res) => {
     return res.json({ result : result.affectedRows });
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong"+error });
+  }
+};
+
+const countPendingBrouclean = async (req, res) => {
+  try {
+    const { nameCounter } = req.params;
+    const [result] = await pool.query("SELECT COUNT(*) AS counter FROM request_device_brouclean WHERE RDEV_ESTA = 'pending' ");
+    return res.status(201).json({ counter: result[0].counter });
+  } catch (error) {
+    return res.status(500).json({ error: error });
+  }
+};
+
+const statusAddedBrouclean = async (req, res) => {
+  try {
+    const { androidID } = req.params;
+    const [result] = await pool.query("UPDATE request_device_brouclean SET RDEV_ESTA = 'added' WHERE RDEV_ANID = ?",
+    [ androidID ]);
+    if (result.affectedRows === 0){
+      return res.status(404).json({ message: "androidID no econtrado" }); // Cambiar status para que no salte como error cuando no hay modificaciones
+    }else{
+      return res.status(201).json({ message: "Estado de solicitud cambiada" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" + error });
+  }
+};
+
+const deleteRequestDeviceBrouclean = async (req, res) => {
+  try {
+    const { androidID } = req.params;
+    const [result] = await pool.query("DELETE FROM request_device_brouclean WHERE RDEV_ANID = ?",
+    [ androidID ]);
+    if (result.affectedRows === 0){
+      return res.status(404).json({ result: 0 }); //androidID no econtrado
+    }else{
+      res.status(201).json({ result: 1}); //Estado de solicitud cambiada
+    }
+  } catch (error) {
+    return res.status(500).json({ result: 2 }); //Error en el Servidor
+  }
+};
+
+const deleteAllRequestDeviceBrouclean = async (req, res) => {
+  try {
+    const [result] = await pool.query("DELETE FROM request_device_brouclean");
+    res.status(201).json({ result: 1}); // Todas las solicitudes eliminadas
+  } catch (error) {
+    res.status(500).json({ result: 2 }); //Error en el Servidor
   }
 };
 
@@ -488,6 +557,16 @@ const getPersonalBrouclean = async (req, res) => {
 };
 
 // TABLE USERS
+
+const getAllUsersBrouclean = async (req, res) => {
+  try {
+    const [rows] = await pool.query("SELECT USER_CODI, USER_LEGA, USER_PERF, PERS_NOMB, PERS_SECT, PERS_FEGR FROM users_brouclean JOIN personal ON users_brouclean.USER_CODI = personal.PERS_CODI;");
+    res.json(rows);
+  }
+  catch (error) {
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
 
 const userRegisterBrouclean = async (req, res) => {
   try {
@@ -553,6 +632,20 @@ const userRecoveryKeyBrouclean = async (req, res) => {
   }
 };
 
+const deleteUserBrouclean = async (req, res) => {
+  try {
+    const { userCodi } = req.params;
+    const [result] = await pool.query("DELETE FROM users_brouclean WHERE USER_CODI = ?",[ userCodi ]);
+    if (result.affectedRows === 0){
+      res.status(404).json({ result: 0 }); // UserCodi no econtrado
+    }else{
+      res.status(201).json({ result: 1}); // Usuario Eliminado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
+  }
+};
+
 // TABLE DEVICES
 
 const getAllDevicesBrouclean = async (req, res) => {
@@ -561,6 +654,34 @@ const getAllDevicesBrouclean = async (req, res) => {
     res.json(rows);
   } catch (error) {
     res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+const addDeviceBrouclean = async (req, res) => {
+  try {
+    const { devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic } = req.body;
+    const [result] = await pool.query(
+      "INSERT INTO devices_brouclean VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      [ devi_anid,	devi_date,	devi_esta,	devi_ccli,	devi_cobj,	devi_marc,	devi_mode, devi_ncli,	devi_nobj, devi_nlin, devi_coor, devi_radi, devi_ubic ]
+    );
+    res.json({ result: 0 } );
+  } catch (error) {
+    res.json({ result: 1 });
+  }
+};
+
+const deleteDeviceBrouclean = async (req, res) => {
+  try {
+    const { androidID } = req.params;
+    const [result] = await pool.query("DELETE FROM devices_brouclean WHERE DEVI_ANID = ?",
+    [ androidID ]);
+    if (result.affectedRows === 0){
+      res.status(404).json({ result: 0 }); // Android ID no econtrado
+    }else{
+      res.status(201).json({ result: 1}); // Dispositivo Eliminado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
   }
 };
 
@@ -719,5 +840,15 @@ module.exports = {
   closeLastSessionBrouclean,
   setHoraEgresoBrouclean,
   getLastVersionBrouclean,
-  userRecoveryKeyBrouclean
+  userRecoveryKeyBrouclean,
+  getAllUsersBrouclean,
+  deleteUserBrouclean,
+  countPendingBrouclean,
+  getRequestDevicesBrouclean,
+  addDeviceBrouclean,
+  statusAddedBrouclean,
+  deleteRequestDeviceBrouclean,
+  deleteAllRequestDeviceBrouclean,
+  getClienteBrouclean,
+  deleteDeviceBrouclean
   };
