@@ -726,7 +726,7 @@ const addPuestoBrouclean = async (req, res) => {
   try {
     const { asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm, asig_venc, asig_empr } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO asig_brouclean_app (ASIG_OBJE,	ASIG_VIGI,	ASIG_FECH,	ASIG_DHOR,	ASIG_HHOR,	ASIG_AUSE,	ASIG_DETA,	ASIG_VISA,	ASIG_OBSE,	ASIG_USUA,	ASIG_TIME,	ASIG_FACT,	ASIG_PUES,	ASIG_BLOQ,	ASIG_ESTA,	ASIG_FACM, ASIG_VENC, ASIG_EMPR ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO asigvigi_app (ASIG_OBJE,	ASIG_VIGI,	ASIG_FECH,	ASIG_DHOR,	ASIG_HHOR,	ASIG_AUSE,	ASIG_DETA,	ASIG_VISA,	ASIG_OBSE,	ASIG_USUA,	ASIG_TIME,	ASIG_FACT,	ASIG_PUES,	ASIG_BLOQ,	ASIG_ESTA,	ASIG_FACM, ASIG_VENC, ASIG_EMPR ) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [ asig_obje,	asig_vigi,	asig_fech,	asig_dhor,	asig_hhor,	asig_ause,	asig_deta,	asig_visa,	asig_obse,	asig_usua,	asig_time,	asig_fact,	asig_pues,	asig_bloq,	asig_esta,	asig_facm, asig_venc, asig_empr ]
     );
     return res.status(201).json({ result : result.affectedRows,
@@ -741,7 +741,7 @@ const setHoraEgresoBrouclean = async (req, res) => {
   try {
     const { asigId } = req.params;
     const { horaEgreso } = req.body;
-    const [result] = await pool.query("UPDATE asig_brouclean_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
+    const [result] = await pool.query("UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
     [ horaEgreso, asigId]);
     if (result.affectedRows === 0){
       return res.status(404).json({ result: 0 });
