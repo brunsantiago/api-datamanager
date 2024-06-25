@@ -303,6 +303,24 @@ const updateDevice = async (req, res) => {
   }
 };
 
+const updateVersionDevice = async (req, res) => {
+  try {
+    const { androidId, idEmpresa } = req.params;
+    const { appVersion } = req.body;
+    let table_name = selectTableDevices(idEmpresa);
+    const [result] = await pool.query("UPDATE " + table_name + " SET DEVI_VERS=? WHERE DEVI_ANID = ?",
+    [ appVersion, androidId ]
+    );
+    if (result.affectedRows === 0){
+      res.status(200).json({ result: 0 }); // Android ID no econtrado o sin cambios
+    }else{
+      res.status(201).json({ result: 1}); // Dispositivo Actualizado
+    }
+  } catch (error) {
+    res.status(500).json({ result: 2 }); // Error en el Servidor
+  }
+};
+
 // TABLE NOTIFICATION
 
 const getCounter = async (req, res) => {
@@ -828,6 +846,16 @@ function randomString(len, an) {
   return str;
 }
 
+function selectTableDevices(idEmpresa){
+  if(idEmpresa==1){
+    return "devices"
+  }else if(idEmpresa==2){
+    return "devices_consisa"
+  }else if(idEmpresa==3){
+    return "devices_brouclean"
+  }
+}
+
 module.exports = {
   getAllUsers,
   getUserProfile,
@@ -887,5 +915,6 @@ module.exports = {
   getClienteBrouclean,
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
-  updateVersionDeviceBrouclean
+  updateVersionDeviceBrouclean,
+  updateVersionDevice
   };

@@ -59,7 +59,8 @@ const {
   getClienteBrouclean,
   deleteDeviceBrouclean,
   updateDeviceBrouclean,
-  updateVersionDeviceBrouclean
+  updateVersionDeviceBrouclean,
+  updateVersionDevice
   } = require("../controllers/employees.controller.js");
 
 
@@ -149,6 +150,9 @@ router.delete("/devices/:androidID", deleteDevice );
 
 //UPDATE Device
 router.put("/devices", updateDevice );
+
+//UPDATE Version Device
+router.patch("/devices/:androidId/:idEmpresa", updateVersionDevice );
 
 
 // TABLE REQUEST DEVICE
