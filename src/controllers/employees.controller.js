@@ -180,6 +180,69 @@ const addPuestoVigilador = async (req, res) => {
   }
 };
 
+// TABLE ASIGVIGI + LAST_SESSION
+
+const registrarIngresoCompleto = async (req, res) => {
+  const connection = await pool.getConnection();
+  
+  try {
+    await connection.beginTransaction();
+    
+    // Datos para asigvigi
+    const { 
+      asig_obje, asig_vigi, asig_fech, asig_dhor, asig_visa, 
+      asig_usua, asig_time, asig_pues, asig_bloq, asig_facm, asig_venc, asig_empr 
+    } = req.body;
+    
+    // Primer inserción - asigvigi
+    const [resultAsigvigi] = await connection.query(
+      "INSERT INTO asigvigi_app (ASIG_OBJE, ASIG_VIGI, ASIG_FECH, ASIG_DHOR, ASIG_HHOR, ASIG_AUSE, ASIG_DETA, ASIG_VISA, ASIG_OBSE, ASIG_USUA, ASIG_TIME, ASIG_FACT, ASIG_PUES, ASIG_BLOQ, ASIG_ESTA, ASIG_FACM, ASIG_VENC, ASIG_EMPR) VALUES (?, ?, ?, ?, '', '', '', ?, '', ?, ?, '', ?, ?, ?, ?, ?, ?)",
+      [asig_obje, asig_vigi, asig_fech, asig_dhor, asig_visa, asig_usua, asig_time, asig_pues, asig_bloq, asig_bloq, asig_facm, asig_venc, asig_empr]
+    );
+    
+    const asigId = resultAsigvigi.insertId;
+    
+    // Datos para last_session
+    const { 
+      last_cper, last_ccli, last_cobj, last_fech, last_dhor, last_hhor,
+      last_usua, last_time, last_pues, last_npue, last_ncli, last_nobj, 
+      last_dhre, idEmpresa 
+    } = req.body;
+    
+    let table_name = selectTableLastSession(idEmpresa);
+    
+    // Segunda inserción - last_session
+    await connection.query(
+      "INSERT INTO " + table_name + " (LAST_CPER, LAST_CCLI, LAST_COBJ, LAST_FECH, LAST_DHOR, LAST_HHOR, LAST_USUA, LAST_PUES, LAST_NPUE, LAST_ESTA, LAST_NCLI, LAST_NOBJ, LAST_DHRE, LAST_TIME, LAST_ASID) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ON DUPLICATE KEY UPDATE LAST_CCLI=VALUES(LAST_CCLI), LAST_COBJ=VALUES(LAST_COBJ), LAST_FECH=VALUES(LAST_FECH), LAST_DHOR=VALUES(LAST_DHOR), LAST_HHOR=VALUES(LAST_HHOR), LAST_USUA=VALUES(LAST_USUA), LAST_PUES=VALUES(LAST_PUES), LAST_NPUE=VALUES(LAST_NPUE), LAST_ESTA=VALUES(LAST_ESTA), LAST_NCLI=VALUES(LAST_NCLI), LAST_NOBJ=VALUES(LAST_NOBJ), LAST_DHRE=VALUES(LAST_DHRE), LAST_TIME=VALUES(LAST_TIME), LAST_ASID=VALUES(LAST_ASID)",
+      [last_cper, last_ccli, last_cobj, last_fech, last_dhor, last_hhor, last_usua, last_pues, last_npue, true, last_ncli, last_nobj, last_dhre, last_time, asigId]
+    );
+    
+    // Si todo fue exitoso, confirmar la transacción
+    await connection.commit();
+    
+    return res.status(200).json({ 
+      success: true, 
+      result: 1, 
+      asigId: asigId 
+    });
+    
+  } catch (error) {
+    // Si hay algún error, revertir la transacción
+    await connection.rollback();
+    
+    console.error("Error en la transacción:", error);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Error al registrar ingreso", 
+      error: error.message 
+    });
+    
+  } finally {
+    // Siempre liberar la conexión
+    connection.release();
+  }
+};
+
 // TABLE PERSONAL
 
 const getPersonal = async (req, res) => {
@@ -681,5 +744,6 @@ module.exports = {
   getNumberPuestos,                   
   getLastVersion,
   updateVersionDevice,
-  getAllHolidays
+  getAllHolidays,
+  registrarIngresoCompleto
   };

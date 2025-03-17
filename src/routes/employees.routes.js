@@ -41,7 +41,8 @@ const {
   getNumberPuestos,
   getLastVersion,
   updateVersionDevice,
-  getAllHolidays
+  getAllHolidays,
+  registrarIngresoCompleto
   } = require("../controllers/employees.controller.js");
 
 
@@ -87,6 +88,10 @@ router.patch("/asigvigi/:asigId", setHoraEgresoVigilador)
 
 // POST Cargar Hora Ingreso Empleado
 router.post("/asigvigi", addPuestoVigilador);
+
+// TABLE ASIGVIGI + LAST SESION
+
+router.post("/registro_completo/:idEmpresa", registrarIngresoCompleto);
 
 
 // TABLE PERSONAL
