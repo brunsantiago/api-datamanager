@@ -21,9 +21,6 @@ const {
   getNumberObjetivos,
   getObjetivos,
   requestCoordinate,
-  getCounter,
-  incrementCounter,
-  decrementCounter,
   getDevice,
   addDevice,
   getAllDevices,
@@ -36,13 +33,13 @@ const {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos,
-  getPuestosFeriados,
   getAllPuestos,
   getNumberPuestos,
   getLastVersion,
   updateVersionDevice,
   getAllHolidays,
-  registrarIngresoCompleto
+  registrarIngresoCompleto,
+  registrarSalidaCompleta
   } = require("../controllers/employees.controller.js");
 
 
@@ -71,27 +68,32 @@ router.delete("/users/:userCodi/:idEmpresa", deleteUser );
 
 // TABLE LAST SESION
 
-// POST Cargar Ultima Sesion
+// POST Cargar Ultima Sesion (Hasta la version 1.3.7 - Ojo version Brouclean)
 router.post("/last_session/:idEmpresa", setLastSession);
 
 // GET Cargar Ultima Sesion
 router.get("/last_session/:persCodi/:idEmpresa", getLastSession);
 
-// PATCH Cerrar Ultima Sesion
+// PATCH Cerrar Ultima Sesion (Hasta la version 1.3.7 - Ojo version Brouclean)
 router.patch("/last_session/:persCodi/:idEmpresa", closeLastSession);
 
 
 // TABLE ASIGVIGI
 
-// PATCH Cargar Hora Egreso Empleado
+// PATCH Cargar Hora Egreso Empleado (Hasta la version 1.3.7 - Ojo version Brouclean)
 router.patch("/asigvigi/:asigId", setHoraEgresoVigilador)
 
-// POST Cargar Hora Ingreso Empleado
+// POST Cargar Hora Ingreso Empleado (Hasta la version 1.3.7 - Ojo version Brouclean)
 router.post("/asigvigi", addPuestoVigilador);
+
 
 // TABLE ASIGVIGI + LAST SESION
 
+//POST Registra el Ingreso tanto en la tabla ASIGVIGI como en LAST SESION (A partir de la version 1.3.8 - Ojo version Brouclean)
 router.post("/registro_completo/:idEmpresa", registrarIngresoCompleto);
+
+//POST Registra la salida tanto en la tabla ASIGVIGI como en LAST SESION (A partir de la version 1.3.8 - Ojo version Brouclean)
+router.patch("/registro_salida/:asigId/:idEmpresa", registrarSalidaCompleta);
 
 
 // TABLE PERSONAL

@@ -243,6 +243,54 @@ const registrarIngresoCompleto = async (req, res) => {
   }
 };
 
+const registrarSalidaCompleta = async (req, res) => {
+  const connection = await pool.getConnection();
+  
+  try {
+    await connection.beginTransaction();
+    
+    const { asigId } = req.params;
+    const { horaEgreso, persCodi } = req.body;
+    
+    // Primera operación - actualizar asigvigi
+    const [resultAsigvigi] = await connection.query(
+      "UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
+      [horaEgreso, asigId]
+    );
+    
+    // Segunda operación - cerrar estado de sesión
+    const [resultSesion] = await connection.query(
+      "UPDATE " + selectTableLastSession(req.params.idEmpresa) + " SET LAST_ESTA = 0 WHERE LAST_CPER = ?",
+      [persCodi]
+    );
+    
+    // Si todo fue exitoso, confirmar la transacción
+    await connection.commit();
+    
+    return res.status(200).json({ 
+      success: true, 
+      message: "Salida registrada correctamente",
+      asigResult: resultAsigvigi.affectedRows,
+      sesionResult: resultSesion.affectedRows
+    });
+    
+  } catch (error) {
+    // Si hay algún error, revertir la transacción
+    await connection.rollback();
+    
+    console.error("Error en la transacción:", error);
+    return res.status(500).json({ 
+      success: false, 
+      message: "Error al registrar salida", 
+      error: error.message 
+    });
+    
+  } finally {
+    // Siempre liberar la conexión
+    connection.release();
+  }
+};
+
 // TABLE PERSONAL
 
 const getPersonal = async (req, res) => {
@@ -436,49 +484,6 @@ const updateVersionDevice = async (req, res) => {
   }
 };
 
-// TABLE NOTIFICATION
-
-const getCounter = async (req, res) => {
-  try {
-    const { nameCounter } = req.params;
-    const [result] = await pool.query("SELECT counter FROM notification WHERE name = ? ",
-    [ nameCounter ]);
-    return res.status(201).json({ result: result[0].counter });
-  } catch (error) {
-    return res.status(500).json({ error: error });
-  }
-};
-
-const incrementCounter = async (req, res) => {
-  try {
-    const { nameCounter } = req.params;
-    const [result] = await pool.query("UPDATE notification SET counter = counter + 1 WHERE name = ?",
-    [ nameCounter ]);
-    if (result.affectedRows === 0){
-      return res.status(404).json({ message: "Counter no econtrado" });
-    }else{
-      res.status(201).json({ message: "Notificacion incrementada correctamente" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong: " + error });
-  }
-};
-
-const decrementCounter = async (req, res) => {
-  try {
-    const { nameCounter } = req.params;
-    const [result] = await pool.query("UPDATE notification SET counter = counter - 1 WHERE name = ?",
-    [ nameCounter ]);
-    if (result.affectedRows === 0){
-      return res.status(404).json({ message: "Counter no econtrado" });
-    }else{
-      res.status(201).json({ message: "Notificacion decrementada correctamente" });
-    }
-  } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" + error });
-  }
-};
-
 // TABLE REQUEST DEVICES
 
 const getRequestDevices = async (req, res) => {
@@ -567,17 +572,6 @@ const getPuestos = async (req, res) => {
   try {
     const { idCliente, idObjetivo } = req.params;
     const [rows] = await pool.query("SELECT * FROM puestos WHERE PUES_OBJE = ? AND PUES_GRUP = ? AND PUES_TIPO != 3",
-    [ idCliente, idObjetivo ]);
-    res.json(rows);
-  } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" });
-  }
-};
-
-const getPuestosFeriados = async (req, res) => {
-  try {
-    const { idCliente, idObjetivo } = req.params;
-    const [rows] = await pool.query("SELECT * FROM puestos_test WHERE PUES_OBJE = ? AND PUES_GRUP = ? AND PUES_TIPO != 3",
     [ idCliente, idObjetivo ]);
     res.json(rows);
   } catch (error) {
@@ -724,9 +718,6 @@ module.exports = {
   getNumberObjetivos,
   getObjetivos,
   requestCoordinate,
-  getCounter,
-  incrementCounter,
-  decrementCounter,
   getDevice,
   addDevice,
   getAllDevices,
@@ -739,11 +730,11 @@ module.exports = {
   deleteRequestDevice,
   deleteAllRequestDevice,
   getPuestos,
-  getPuestosFeriados,
   getAllPuestos,
   getNumberPuestos,                   
   getLastVersion,
   updateVersionDevice,
   getAllHolidays,
-  registrarIngresoCompleto
+  registrarIngresoCompleto,
+  registrarSalidaCompleta
   };
