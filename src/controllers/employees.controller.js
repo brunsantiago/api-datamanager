@@ -250,12 +250,12 @@ const registrarSalidaCompleta = async (req, res) => {
     await connection.beginTransaction();
     
     const { asigId } = req.params;
-    const { horaEgreso, persCodi } = req.body;
+    const { horaEgreso, horaEgresoReal, persCodi } = req.body;
     
     // Primera operación - actualizar asigvigi
     const [resultAsigvigi] = await connection.query(
-      "UPDATE asigvigi_app SET ASIG_HHOR = ? WHERE ASIG_ID = ?",
-      [horaEgreso, asigId]
+      "UPDATE asigvigi_app SET ASIG_HHOR = ?, ASIG_VENC = ? WHERE ASIG_ID = ?",
+      [horaEgreso, horaEgresoReal, asigId]
     );
     
     // Segunda operación - cerrar estado de sesión
