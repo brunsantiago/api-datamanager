@@ -353,10 +353,10 @@ const getCliente = async (req, res) => {
 const getAllObjetivos = async (req, res) => {
   try {
     const { idEmpresa } = req.params;
-    const [rows] = await pool.query("SELECT GRUP_CODI, OBJE_NOMB, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puesgrup g JOIN puestos p ON g.GRUP_CODI = p.PUES_GRUP JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI WHERE o.OBJE_BAJA IS NULL AND g.OBJE_BAJA IS NULL AND (g.GRUP_HABI = 1 OR g.GRUP_HABI = 2) AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?", [ idEmpresa ]);
+    const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(o.OBJE_NOMB) AS OBJE_NOMB, TRIM(g.OBJE_TFAX) AS GRUP_NOMB FROM puesgrup g JOIN puestos p ON g.GRUP_CODI = p.PUES_GRUP JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI WHERE o.OBJE_BAJA IS NULL AND g.OBJE_BAJA IS NULL AND (g.GRUP_HABI = 1 OR g.GRUP_HABI = 2) AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?", [ idEmpresa ]);
     res.json(rows);
   } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" });
+    return res.status(500).json({ message: "Something goes wrong: " + error });
   }
 };
 
@@ -373,11 +373,11 @@ const getNumberObjetivos = async (req, res) => {
 const getObjetivos = async (req, res) => {
   try {
     const { idCliente } = req.params;
-    const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(GRUP_NOMB) AS GRUP_NOMB FROM puestos, puesgrup WHERE PUES_GRUP=GRUP_CODI AND PUES_OBJE = ? AND OBJE_BAJA IS NULL AND PUES_TIPO != 3",
+    const [rows] = await pool.query("SELECT DISTINCT GRUP_CODI, TRIM(OBJE_TFAX) AS GRUP_NOMB FROM puestos p, puesgrup WHERE PUES_GRUP=GRUP_CODI AND PUES_OBJE = ? AND OBJE_BAJA IS NULL AND PUES_TIPO != 3",
     [ idCliente ]);
     res.json(rows);
   } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" });
+    return res.status(500).json({ message: "Something goes wrong: " + error });
   }
 };
 
@@ -582,11 +582,11 @@ const getPuestos = async (req, res) => {
 const getAllPuestos = async (req, res) => {
   try {
     const { idEmpresa } = req.params;
-    const [rows] = await pool.query("SELECT p.PUES_CODI, o.OBJE_NOMB, g.GRUP_NOMB, p.PUES_NOMB, p.PUES_DHOR, p.PUES_HHOR FROM puestos p JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI JOIN puesgrup g ON p.PUES_GRUP = g.GRUP_CODI WHERE o.OBJE_BAJA IS NULL AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?",
+    const [rows] = await pool.query("SELECT p.PUES_CODI, TRIM(o.OBJE_NOMB) AS OBJE_NOMB, TRIM(g.OBJE_TFAX) AS GRUP_NOMB, TRIM(p.PUES_NOMB) AS PUES_NOMB, p.PUES_DHOR, p.PUES_HHOR FROM puestos p JOIN objetivo o ON p.PUES_OBJE = o.OBJE_CODI JOIN puesgrup g ON p.PUES_GRUP = g.GRUP_CODI WHERE o.OBJE_BAJA IS NULL AND p.PUES_TIPO != 3 AND o.OBJE_EMPR = ?",
     [ idEmpresa ]);
     res.json(rows);
   } catch (error) {
-    return res.status(500).json({ message: "Something goes wrong" });
+    return res.status(500).json({ message: "Something goes wrong: " + error });
   }
 };
 
