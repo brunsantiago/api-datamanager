@@ -1,6 +1,5 @@
 const pool = require("../db.js");
 const bcryptjs = require('bcryptjs');
-const { generateToken } = require('../middleware/auth.js');
 
 // TABLE USERS
 
@@ -59,27 +58,7 @@ const userLogin = async (req, res) => {
     if(result.length==0){
       return res.json({ result : "NOT_FOUND" });
     }else if (await bcryptjs.compare(user_pass,result[0].USER_PASS)) {
-      // Crear payload para el token JWT
-      const tokenPayload = {
-        userCodi: result[0].USER_CODI,
-        userLega: result[0].USER_LEGA,
-        userPerf: result[0].USER_PERF,
-        idEmpresa: idEmpresa
-      };
-
-      // Generar token JWT
-      const token = generateToken(tokenPayload);
-
-      // Devolver respuesta con token
-      return res.json({
-        result: "CORRECT_LOGIN",
-        token: token,
-        user: {
-          codi: result[0].USER_CODI,
-          lega: result[0].USER_LEGA,
-          perf: result[0].USER_PERF
-        }
-      });
+      return res.json({ result : "CORRECT_LOGIN" });
     }else {
       return res.json({ result : "INCORRECT_LOGIN" });
     }
