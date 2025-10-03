@@ -2,7 +2,8 @@ const express = require("express");
 const morgan = require("morgan");
 const cors = require("cors");
 
-const employeesRoutes = require("./routes/employees.routes.js");
+const employeesRoutesV1 = require("./routes/employees.routes.v1.js");
+const employeesRoutesV2 = require("./routes/employees.routes.v2.js");
 const indexRoutes = require("./routes/index.routes.js");
 
 const app = express();
@@ -14,7 +15,9 @@ app.use(cors());
 
 // Routes
 app.use("/", indexRoutes);
-app.use("/api", employeesRoutes);
+app.use("/api/v1", employeesRoutesV1);  // Version 1 - Sin JWT
+app.use("/api/v2", employeesRoutesV2);  // Version 2 - Con JWT
+app.use("/api", employeesRoutesV1);     // Backward compatibility (default a v1)
 
 app.use((req, res, next) => {
   res.status(404).json({ message: "Not found" });
